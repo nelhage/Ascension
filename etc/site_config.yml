@@ -10,7 +10,7 @@ framework:
     Password: ''
     RecordBaseClass: Jifty::DBI::Record::Cachable
     User: ''
-    Version: 0.0.2
+    Version: 0.0.3
   Mailer: Sendmail
   MailerArgs: []
   # LogLevel: DEBUG

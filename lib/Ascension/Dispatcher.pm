@@ -17,7 +17,7 @@ on qr{^/user/([^/]+)(/edit|)$} => run {
     my $user = Ascension::Model::User->new;
     my $edit = $2;
     $user->load_by_cols(username => $username);
-    if(!$user) {
+    if(!$user || !$user->is_tracked) {
         redirect '/errors/no_such_user';
     }
     if($edit && !$user->current_user_can('update')) {

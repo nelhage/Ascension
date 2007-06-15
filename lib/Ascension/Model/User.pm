@@ -14,6 +14,11 @@ column username =>
 column milestones =>
     refers_to Ascension::Model::UserMilestoneCollection by 'who';
 
+column is_tracked =>
+    type is 'boolean',
+    default is 0,
+    since '0.0.3';
+
 };
 
 sub since { '0.0.2' };
@@ -70,7 +75,6 @@ sub current_user_can {
 
     return 1 if $right eq 'read' || $right eq 'create';
     return 1 if $right eq 'update' && $self->id == $self->current_user->id;
-    return 1;
 
     return $self->SUPER::current_user_can($right, @_);
 }

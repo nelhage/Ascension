@@ -12,6 +12,13 @@ Ascension::View
 package Ascension::View;
 use Jifty::View::Declare -base;
 
+template '/' => page {
+    h1 { "Nethack Summer of Ascension" };
+    my $ucol = Ascension::Model::User::Collection->new;
+    $ucol->unlimit;
+    
+};
+
 template '/status' => page {
     my $user = get 'user';
     my $edit = get 'edit';
