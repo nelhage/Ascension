@@ -1,0 +1,30 @@
+--- 
+framework: 
+  AdminMode: 1
+  DevelMode: 1
+  Database: 
+    CheckSchema: 1
+    Database: ascension
+    Driver: SQLite
+    Host: localhost
+    Password: ''
+    RecordBaseClass: Jifty::DBI::Record::Cachable
+    User: ''
+    Version: 0.0.2
+  Mailer: Sendmail
+  MailerArgs: []
+  # LogLevel: DEBUG
+  Web: 
+    BaseURL: http://localhost
+    DataDir: var/mason
+    Globals: []
+
+    MasonConfig: 
+      autoflush: 0
+      default_escape_flags: h
+      error_format: text
+      error_mode: fatal
+    Port: 8888
+    ServeStaticFiles: 1
+    StaticRoot: share/web/static
+    TemplateRoot: share/web/templates
