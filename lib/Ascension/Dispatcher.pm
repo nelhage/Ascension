@@ -12,6 +12,21 @@ before '*' => run {
     }
 };
 
+before '/user/**' => run {
+    my $nav = Jifty->web->navigation;
+    my $ucol = Ascension::Model::UserCollection->new;
+    $ucol->limit(column => 'is_tracked', value => 1);
+    while(my $u = $ucol->next) {
+        $nav->child($u->username,
+                   label => $u->username,
+                   url => "/user/" . $u->username);
+    }
+};
+
+before qr{^/admin} => run {
+    redirect '/' unless Jifty->web->current_user->is_superuser;
+};
+
 on qr{^/user/([^/]+)(/edit|)$} => run {
     my $username = $1;
     my $user = Ascension::Model::User->new;

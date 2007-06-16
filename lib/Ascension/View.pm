@@ -158,4 +158,9 @@ sub milemark {
     }
 }
 
+use Jifty::View::Declare::CRUD;
+for (qw(User Milestone UserMilestone)) {
+    Jifty::View::Declare::CRUD->mount_view($_, undef, '/admin/' . (lc $_));
+}
+
 1;
