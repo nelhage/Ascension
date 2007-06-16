@@ -103,6 +103,15 @@ sub _milestones {
     return $milestones;
 }
 
+sub has_ascended {
+    my $self = shift;
+    my $milestone = Ascension::Model::Milestone->new();
+    $milestone->load_by_cols(description => 'Ascended');
+    my $um = Ascension::Model::UserMilestone->new();
+    $um->load_by_cols(who => $self, milestone => $milestone);
+    return $um->once;
+}
+
 
 1;
 

@@ -22,10 +22,12 @@ template '/' => page {
     h1 { "Nethack Summer of Ascension" };
     h2 {" All users' progress "};
 
-    with (id => 'progress-milestones', class => 'all-table'),
+    with (id => 'progress-milestones', class => 'all-table',
+          cellspacing => ('0 but true'), cellpadding => ('0 but true')),
     table {
         with (class => 'header'), row {
             cell { "Milestone" };
+            with(class => ($_->has_ascended ? 'ascended' : '')),
             cell { hyperlink(url => "/user/" . $_->username,
                              label => $_->username)
                } for (@users);
@@ -39,7 +41,8 @@ template '/' => page {
                 for my $u (@users) {
                     my ($ok, $err) = $um->load_by_cols(who => $u, milestone => $m);
 
-                    with(class => 'checkcell'), cell {
+                    with(class => 'checkcell' .
+                         ($u->has_ascended ? ' ascended' : '')), cell {
                         milemark($um, undef, undef, 'once');
                     }
                 }

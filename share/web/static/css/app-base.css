@@ -1,3 +1,7 @@
+table.all-table {
+    border-padding: 0px;
+}
+
 tr.header {
     font-weight: bold;
 }
@@ -7,8 +11,20 @@ tr.header {
     padding: auto;
 }
 
+.all-table .td {
+    padding: 0px;
+    margin: 0px;
+}
+
 .all-table td.checkcell {
     width: 80px;
     text-align: center;
     padding: auto;
+}
+
+.all-table td.ascended {
+    background-color: #FFA;
+    border: 1px solid #FFA;
+    padding: 0px;
+    margin: 0px;
 }
