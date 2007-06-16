@@ -13,9 +13,39 @@ package Ascension::View;
 use Jifty::View::Declare -base;
 
 template '/' => page {
+    my $ucol = Ascension::Model::UserCollection->new;
+    my $milestones;
+    my $um = Ascension::Model::UserMilestone->new;
+    $ucol->limit(column => 'is_tracked', value => 1);
+    my @users = @{$ucol->items_array_ref};
+
     h1 { "Nethack Summer of Ascension" };
-    my $ucol = Ascension::Model::User::Collection->new;
-    $ucol->unlimit;
+    h2 {" All users' progress "};
+
+    with (id => 'progress-milestones', class => 'milestone-table'),
+    table {
+        with (class => 'header'), row {
+            cell { "Milestone" };
+            cell { hyperlink(url => "/user/" . $_->username,
+                             label => $_->username)
+               } for (@users);
+        };
+        $milestones = Ascension::Model::MilestoneCollection->new;
+        $milestones->limit(column => 'type', value => 'progress');
+        $milestones->order_by(column => 'seq', order => 'ASC');
+        while(my $m = $milestones->next) {
+            row {
+                cell {$m->description};
+                for my $u (@users) {
+                    my ($ok, $err) = $um->load_by_cols(who => $u, milestone => $m);
+
+                    cell {
+                        milemark($um, undef, undef, 'once');
+                    }
+                }
+            };
+        }
+    };
     
 };
 
