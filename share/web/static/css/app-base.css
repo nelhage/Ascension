@@ -1,0 +1,14 @@
+tr.header {
+    font-weight: bold;
+}
+
+.all-table tr.header td {
+    text-align: center;
+    padding: auto;
+}
+
+.all-table td.checkcell {
+    width: 80px;
+    text-align: center;
+    padding: auto;
+}

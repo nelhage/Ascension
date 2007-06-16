@@ -22,7 +22,7 @@ template '/' => page {
     h1 { "Nethack Summer of Ascension" };
     h2 {" All users' progress "};
 
-    with (id => 'progress-milestones', class => 'milestone-table'),
+    with (id => 'progress-milestones', class => 'all-table'),
     table {
         with (class => 'header'), row {
             cell { "Milestone" };
@@ -39,7 +39,7 @@ template '/' => page {
                 for my $u (@users) {
                     my ($ok, $err) = $um->load_by_cols(who => $u, milestone => $m);
 
-                    cell {
+                    with(class => 'checkcell'), cell {
                         milemark($um, undef, undef, 'once');
                     }
                 }
@@ -79,10 +79,10 @@ template '/status' => page {
                 record => $um);
             row {
                 cell { $um->milestone->description };
-                cell {
+                with(class => 'checkcell'), cell {
                     milemark($um, $action, $edit, 'once');
                 };
-                cell {
+                with(class => 'checkcell'), cell {
                     milemark($um, $action, $edit, 'consistent');
                 }
             };
@@ -105,7 +105,7 @@ template '/status' => page {
                 record => $um);
             row {
                 cell { $um->milestone->description };
-                cell {
+                with(class => 'checkcell'), cell {
                     milemark($um, $action, $edit, 'once');
                 };
             };
@@ -125,7 +125,7 @@ private template 'salutation' => sub {
         }
         else {
             use URI;
-            my $uri = URI->new(Jifty->web->url("/"));
+            my $uri = URI->new(Jifty->web->url);
             $uri->scheme("https");
             $uri->port(444);
             $uri->path($ENV{PATH_INFO});
