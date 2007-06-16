@@ -115,6 +115,27 @@ template '/status' => page {
     }
 };
 
+private template 'salutation' => sub {
+    div {
+    attr {id => "salutation" };
+        if (    Jifty->web->current_user->id
+            and Jifty->web->current_user->user_object )
+        {
+            _( 'Hiya, %1.', Jifty->web->current_user->username );
+        }
+        else {
+            use URI;
+            my $uri = URI->new(Jifty->web->url("/"));
+            $uri->scheme("https");
+            $uri->port(444);
+            $uri->path($ENV{PATH_INFO});
+            outs(_("You're not currently signed in. "));
+            hyperlink(url => $uri->as_string, label => 'Sign in');
+            outs(_(" with your MIT certificates"));
+        }
+    }
+};
+
 
 sub milemark {
     my $um = shift;
