@@ -14,6 +14,24 @@ column username =>
 column milestones =>
     refers_to Ascension::Model::UserMilestoneCollection by 'who';
 
+column lowest_ac =>
+    type is 'int',
+    default is 10,
+    label is 'Best AC achieved',
+    since '0.0.4';
+
+column lowest_dlvl =>
+    type is 'int',
+    default is 1,
+    label is 'Lowest level explored',
+    since '0.0.4';
+
+column highest_xlvl =>
+    type is 'int',
+    default is 1,
+    label is 'Highest XP level reached',
+    since '0.0.4';
+
 column is_tracked =>
     type is 'boolean',
     default is 0,

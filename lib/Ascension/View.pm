@@ -47,7 +47,26 @@ template '/' => page {
                     }
                 }
             };
-        }
+        };
+        with(class => 'stats'),
+        row {
+            cell { "Lowest level explored" };
+            with(class => 'checkcell' .
+                 ($_->has_ascended ? ' ascended' : '')),
+                 cell { $_->lowest_dlvl } for (@users);
+        };
+        row {
+            cell { "Highest XP level reached" };
+            with(class => 'checkcell' .
+                 ($_->has_ascended ? ' ascended' : '')),
+                 cell { $_->highest_xlvl } for (@users);
+        };
+        row {
+            cell { "Best AC attained" };
+            with(class => 'checkcell' .
+                 ($_->has_ascended ? ' ascended' : '')),
+                 cell { $_->lowest_ac } for (@users);
+        };
     };
     
 };
@@ -56,7 +75,7 @@ template '/status' => page {
     my $user = get 'user';
     my $edit = get 'edit';
     my $milestones;
-
+    my $action;
     
     h1 { "Status for " . $user->username . " (" . $user->name . ")" };
     if($edit) {
@@ -64,58 +83,97 @@ template '/status' => page {
     } elsif ($user->current_user_can('update')){
         hyperlink(url => '/user/' . $user->username . '/edit', label => '[edit]');
     }
-    h2 { "Milestones" };
 
     $milestones = $user->progress_milestones;
 
     form {
-    with (id => 'progress-milestones', class => 'milestone-table'),
-    table {
-        with (class => 'header'), row {
-            cell {$user->username . " has"};
-            cell {"...once"};
-            cell {"...consistently"};
-        };
-        while(my $um = $milestones->next) {
-            my $action = Jifty->web->new_action(
-                class => 'UpdateUserMilestone',
-                record => $um);
-            row {
-                cell { $um->milestone->description };
-                with(class => 'checkcell'), cell {
-                    milemark($um, $action, $edit, 'once');
+        render_region(name => 'stats',
+                      force_path => 'stats_frag',
+                      force_arguments => {user => $user->id, edit => $edit});
+        
+        with(style => 'clear:both'), div {};
+        
+        with(id => 'milestones'),
+        div {
+            h2 { "Milestones" };
+
+            with (id => 'progress-milestones', class => 'milestone-table'),
+            table {
+                with (class => 'header'), row {
+                    cell {$user->username . " has"};
+                    cell {"...once"};
+                    cell {"...consistently"};
                 };
-                with(class => 'checkcell'), cell {
-                    milemark($um, $action, $edit, 'consistent');
+                while(my $um = $milestones->next) {
+                    $action = Jifty->web->new_action(
+                        class => 'UpdateUserMilestone',
+                        record => $um);
+                    row {
+                        cell { $um->milestone->description };
+                        with(class => 'checkcell'), cell {
+                            milemark($um, $action, $edit, 'once');
+                        };
+                        with(class => 'checkcell'), cell {
+                            milemark($um, $action, $edit, 'consistent');
+                        }
+                    };
                 }
             };
-        }
-    };
 
-    h2 { "Other achievements" };
-
-    $milestones = $user->misc_milestones;
-    
-    with (id => 'misc-milestones', class => 'milestone-table'),
-    table {
-        with (class => 'header'), row {
-            cell {$user->username . " has"};
-            cell {};
         };
-        while(my $um = $milestones->next) {
-            my $action = Jifty->web->new_action(
-                class => 'UpdateUserMilestone',
-                record => $um);
-            row {
-                cell { $um->milestone->description };
-                with(class => 'checkcell'), cell {
-                    milemark($um, $action, $edit, 'once');
+
+        with(id => 'other-achievements'),
+        div {
+            h2 { "Other achievements" };
+
+            $milestones = $user->misc_milestones;
+    
+            with (id => 'misc-milestones', class => 'milestone-table'),
+            table {
+                with (class => 'header'), row {
+                    cell {$user->username . " has"};
+                    cell {};
+                };
+                while(my $um = $milestones->next) {
+                    my $action = Jifty->web->new_action(
+                        class => 'UpdateUserMilestone',
+                        record => $um);
+                    row {
+                        cell { $um->milestone->description };
+                        with(class => 'checkcell'), cell {
+                            milemark($um, $action, $edit, 'once');
+                        };
+                    };
                 };
             };
+        };
+    }
+};
+
+template 'stats_frag' => sub {
+    my $user = Ascension::Model::User->new;
+    $user->load(get 'user');
+    my $edit = get 'edit';
+    my $action;
+    
+    with(id => 'stats'),
+    div {
+        $action = Jifty->web->new_action(class => 'UpdateUser', record => $user);
+        h2 { "Stats" };
+        my @extra_args = (render_mode => 'read');
+        if($edit) {
+            @extra_args = (render_mode => 'update');
+        }
+        with(class => 'inline'), div {
+            render_param($action => 'lowest_ac', @extra_args);
+            render_param($action => 'lowest_dlvl', @extra_args);
+            render_param($action => 'highest_xlvl', @extra_args);
+            if($edit) {
+                form_submit(onclick => {submit => $action, refresh_self => 1},
+                            label => 'Update');
+            }
         }
     };
-
-    }
 };
 
 private template 'salutation' => sub {
