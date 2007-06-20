@@ -176,6 +176,27 @@ template 'stats_frag' => sub {
     };
 };
 
+private template 'header' => sub {
+    my ($title) = get_current_attr(qw(title));
+    Jifty->handler->apache->content_type('text/html; charset=utf-8');
+    head { 
+        with(
+            'http-equiv' => "content-type",
+            content      => "text/html; charset=utf-8"
+          ),    
+          meta {};
+        with( name => 'robots', content => 'all' ), meta {};
+        with( rel  => 'shortcut icon',
+              href => Jifty->web->url(path => '/static/images/at.ico'),
+              type => 'image/vnd.microsoft.icon'
+             ), link {};
+        title { _($title) };
+        Jifty->web->include_css;
+        Jifty->web->include_javascript;
+      };
+
+};
+
 private template 'salutation' => sub {
     div {
     attr {id => "salutation" };
