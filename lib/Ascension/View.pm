@@ -11,6 +11,7 @@ Ascension::View
 
 package Ascension::View;
 use Jifty::View::Declare -base;
+use URI;
 
 template '/' => page {
     my $ucol = Ascension::Model::UserCollection->new;
@@ -185,9 +186,11 @@ private template 'header' => sub {
             content      => "text/html; charset=utf-8"
           ),    
           meta {};
+        my $uri = URI->new(Jifty->web->url(path => '/static/images/at.ico'));
+        $uri->port(Jifty->config->framework('Web')->{Port});
         with( name => 'robots', content => 'all' ), meta {};
         with( rel  => 'shortcut icon',
-              href => Jifty->web->url(path => '/static/images/at.ico'),
+              href => $uri->as_string,
               type => 'image/vnd.microsoft.icon'
              ), link {};
         title { _($title) };
@@ -206,7 +209,6 @@ private template 'salutation' => sub {
             _( 'Hiya, %1.', Jifty->web->current_user->username );
         }
         else {
-            use URI;
             my $uri = URI->new(Jifty->web->url);
             $uri->scheme("https");
             $uri->port(444);
