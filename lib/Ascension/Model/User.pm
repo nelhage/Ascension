@@ -32,6 +32,12 @@ column highest_xlvl =>
     label is 'Highest XP level reached',
     since '0.0.4';
 
+column best_death =>
+    type is 'text',
+    render_as 'textarea',
+    label is 'Favorite dumb or stupid death',
+    since '0.0.5';
+
 column is_tracked =>
     type is 'boolean',
     default is 0,

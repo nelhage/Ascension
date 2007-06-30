@@ -169,10 +169,13 @@ template 'stats_frag' => sub {
             render_param($action => 'lowest_ac', @extra_args);
             render_param($action => 'lowest_dlvl', @extra_args);
             render_param($action => 'highest_xlvl', @extra_args);
+            render_param($action => 'best_death', rows => 2, cols => 40,
+                         @extra_args);
             if($edit) {
                 form_submit(onclick => {submit => $action, refresh_self => 1},
                             label => 'Update');
             }
+
         }
     };
 };
