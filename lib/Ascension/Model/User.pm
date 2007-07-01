@@ -35,7 +35,7 @@ column highest_xlvl =>
 column best_death =>
     type is 'text',
     render_as 'textarea',
-    label is 'Favorite dumb or stupid death',
+    label is 'Favorite dumb or amusing death',
     since '0.0.5';
 
 column is_tracked =>
