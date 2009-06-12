@@ -44,3 +44,8 @@ div#milestones {
 div#other-achievements {
     float: left;
 }
+
+div#conduct {
+    float: left;
+    margin-left: 30px;
+}

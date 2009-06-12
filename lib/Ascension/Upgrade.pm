@@ -20,10 +20,23 @@ since '0.0.3' => sub {
     }
 };
 
+since '0.0.6' => sub {
+    my $ms = Ascension::Model::MilestoneCollection->new;
+    $ms->limit(column => 'seq', value => '200', operator => '>=');
+    # $ms->limit(column => 'type', value => 'misc');
+
+    while(my $m = $ms->next) {
+        $m->as_superuser->set_type('conduct');
+        $m->as_superuser->set_seq($m->seq - 200);
+    }
+};
+
+
 =head1 SEE ALSO
 
 Foo, Bar, Baz
 
 =cut
+
 
 1;

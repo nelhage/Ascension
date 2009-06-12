@@ -113,6 +113,11 @@ sub misc_milestones {
     return $self->_milestones('misc');
 }
 
+sub conducts {
+    my $self = shift;
+    return $self->_milestones('conduct');
+}
+
 sub _milestones {
     my $self = shift;
     my $type = shift;

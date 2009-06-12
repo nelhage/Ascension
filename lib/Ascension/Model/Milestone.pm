@@ -8,7 +8,7 @@ use Ascension::Record schema {
 
     column description => type is 'text', hints are 'He/she has ...';
     column seq => type is 'int';
-    column type => type is 'text', valid are qw(progress misc);
+    column type => type is 'text', valid are qw(progress misc conduct);
 
     column users =>
         refers_to Ascension::Model::UserMilestoneCollection by 'milestone';

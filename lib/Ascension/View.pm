@@ -148,6 +148,32 @@ template '/status' => page {
                 };
             };
         };
+
+        with(id => 'conduct'),
+        div {
+            h2 { "Conducts Achieved" };
+
+            $milestones = $user->conducts;
+    
+            with (id => 'conduct-milestones', class => 'conduct-table'),
+            table {
+                with (class => 'header'), row {
+                    cell {$user->username . " has"};
+                    cell {};
+                };
+                while(my $um = $milestones->next) {
+                    my $action = Jifty->web->new_action(
+                        class => 'UpdateUserMilestone',
+                        record => $um);
+                    row {
+                        cell { $um->milestone->description };
+                        with(class => 'checkcell'), cell {
+                            milemark($um, $action, $edit, 'once');
+                        };
+                    };
+                };
+            };
+        };
     }
 };
 
